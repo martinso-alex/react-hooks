@@ -5,6 +5,10 @@ import "./App.css";
 import "fontsource-roboto";
 
 function App() {
+	function onSubmit(dados) {
+		console.log(dados);
+	}
+
 	return (
 		<Container maxWidth='sm'>
 			<Typography
@@ -15,7 +19,7 @@ function App() {
 			>
 				Formulário de Cadastro
 			</Typography>
-			<FormCadastro />
+			<FormCadastro onSubmit={onSubmit} />
 		</Container>
 	);
 }

@@ -1,10 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, FormControlLabel, Switch, TextField } from "@material-ui/core";
 
-export function FormCadastro() {
+export function FormCadastro(props) {
+	const [nome, setNome] = useState("");
+	const [sobrenome, setSobrenome] = useState("");
+	const [cpf, setCpf] = useState("");
+	const [promocoes, setPromocoes] = useState(true);
+	const [novidades, setNovidades] = useState(true);
+
+	const { onSubmit } = props;
+
+	function handleChangeNome(event) {
+		setNome(event.target.value);
+	}
+
+	function handleChangeSobrenome(event) {
+		setSobrenome(event.target.value);
+	}
+
+	function handleChangeCpf(event) {
+		setCpf(event.target.value);
+	}
+
+	function handleChangePromocoes(event) {
+		setPromocoes(event.target.checked);
+	}
+
+	function handleChangeNovidades(event) {
+		setNovidades(event.target.checked);
+	}
+
+	function handleSubmit(event) {
+		event.preventDefault();
+		onSubmit({ nome, sobrenome, cpf, promocoes, novidades });
+	}
+
 	return (
-		<form>
+		<form onSubmit={handleSubmit}>
 			<TextField
+				value={nome}
+				onChange={handleChangeNome}
 				id='nome'
 				label='Nome'
 				variant='outlined'
@@ -13,6 +48,8 @@ export function FormCadastro() {
 			/>
 
 			<TextField
+				value={sobrenome}
+				onChange={handleChangeSobrenome}
 				id='sobrenome'
 				label='Sobrenome'
 				variant='outlined'
@@ -21,6 +58,8 @@ export function FormCadastro() {
 			/>
 
 			<TextField
+				value={cpf}
+				onChange={handleChangeCpf}
 				id='cpf'
 				label='CPF'
 				variant='outlined'
@@ -30,12 +69,26 @@ export function FormCadastro() {
 
 			<FormControlLabel
 				label='Promoções'
-				control={<Switch name='promocoes' color='primary' defaultChecked />}
+				control={
+					<Switch
+						name='promocoes'
+						color='primary'
+						checked={promocoes}
+						onChange={handleChangePromocoes}
+					/>
+				}
 			/>
 
 			<FormControlLabel
 				label='Novidades'
-				control={<Switch name='novidades' color='primary' defaultChecked />}
+				control={
+					<Switch
+						name='novidades'
+						color='primary'
+						checked={novidades}
+						onChange={handleChangeNovidades}
+					/>
+				}
 			/>
 
 			<Button type='submit' variant='contained' color='primary'>
