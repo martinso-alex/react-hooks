@@ -8,7 +8,9 @@ export function FormCadastro(props) {
 	const [promocoes, setPromocoes] = useState(true);
 	const [novidades, setNovidades] = useState(true);
 
-	const { onSubmit } = props;
+	const [erros, setErros] = useState({ cpf: { valido: true, text: "" } });
+
+	const { submit, validarCpf } = props;
 
 	function handleChangeNome(event) {
 		setNome(event.target.value);
@@ -22,6 +24,10 @@ export function FormCadastro(props) {
 		setCpf(event.target.value);
 	}
 
+	function handleBlurCpf() {
+		setErros({ ...erros, cpf: validarCpf(cpf) });
+	}
+
 	function handleChangePromocoes(event) {
 		setPromocoes(event.target.checked);
 	}
@@ -32,7 +38,7 @@ export function FormCadastro(props) {
 
 	function handleSubmit(event) {
 		event.preventDefault();
-		onSubmit({ nome, sobrenome, cpf, promocoes, novidades });
+		submit({ nome, sobrenome, cpf, promocoes, novidades });
 	}
 
 	return (
@@ -60,6 +66,9 @@ export function FormCadastro(props) {
 			<TextField
 				value={cpf}
 				onChange={handleChangeCpf}
+				onBlur={handleBlurCpf}
+				error={!erros.cpf.valido}
+				helperText={erros.cpf.text}
 				id='cpf'
 				label='CPF'
 				variant='outlined'
