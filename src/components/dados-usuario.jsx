@@ -1,29 +1,17 @@
 import React, { useContext, useState } from "react";
 import { Button, TextField } from "@material-ui/core";
 import { ValidaCadastro } from "../contexts/valida-cadastro";
+import { useErros } from "../hooks/useErros";
 
 export function DadosUsuario(props) {
 	const [email, setEmail] = useState("");
 	const [senha, setSenha] = useState("");
 
-	const [erros, setErros] = useState({ senha: { valido: true, text: "" } });
-
-	const { submit } = props;
-
 	const validacoes = useContext(ValidaCadastro);
 
-	function validarCampos(event) {
-		const { value, id } = event.target;
-		const valid = { ...erros };
-		valid[id] = validacoes[id](value);
-		setErros(valid);
-	}
+	const [erros, validarCampos, canSubmit] = useErros(validacoes);
 
-	function canSubmit() {
-		for (let campo in erros) if (!erros[campo].valido) return false;
-
-		return true;
-	}
+	const { submit } = props;
 
 	function handleChangeEmail(event) {
 		setEmail(event.target.value);

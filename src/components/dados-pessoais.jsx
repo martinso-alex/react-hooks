@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Button, FormControlLabel, Switch, TextField } from "@material-ui/core";
 import { ValidaCadastro } from "../contexts/valida-cadastro";
+import { useErros } from "../hooks/useErros";
 
 export function DadosPessoais(props) {
 	const [nome, setNome] = useState("");
@@ -9,24 +10,11 @@ export function DadosPessoais(props) {
 	const [promocoes, setPromocoes] = useState(true);
 	const [novidades, setNovidades] = useState(true);
 
-	const [erros, setErros] = useState({ cpf: { valido: true, text: "" } });
-
-	const { submit } = props;
-
 	const validacoes = useContext(ValidaCadastro);
 
-	function validarCampos(event) {
-		const { value, id } = event.target;
-		const valid = { ...erros };
-		valid[id] = validacoes[id](value);
-		setErros(valid);
-	}
+	const [erros, validarCampos, canSubmit] = useErros(validacoes);
 
-	function canSubmit() {
-		for (let campo in erros) if (!erros[campo].valido) return false;
-
-		return true;
-	}
+	const { submit } = props;
 
 	function handleChangeNome(event) {
 		setNome(event.target.value);
