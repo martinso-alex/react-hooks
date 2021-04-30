@@ -1,18 +1,15 @@
 import { Container, Typography } from "@material-ui/core";
 import { FormCadastro } from "./components/form-cadastro";
 
+import { validarCpf, validarSenha } from "./models/cadastro";
+import { ValidaCadastro } from "./contexts/valida-cadastro";
+
 import "./App.css";
 import "fontsource-roboto";
 
 function App() {
 	function submit(dados) {
 		console.log(dados);
-	}
-
-	function validarCpf(cpf) {
-		if (cpf.length !== 11)
-			return { valido: false, text: "CPF deve ter 11 dígitos" };
-		else return { valido: true, text: "" };
 	}
 
 	return (
@@ -26,7 +23,9 @@ function App() {
 				Formulário de Cadastro
 			</Typography>
 
-			<FormCadastro submit={submit} validarCpf={validarCpf} />
+			<ValidaCadastro.Provider value={{ cpf: validarCpf, senha: validarSenha }}>
+				<FormCadastro submit={submit} />
+			</ValidaCadastro.Provider>
 		</Container>
 	);
 }

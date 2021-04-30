@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button, FormControlLabel, Switch, TextField } from "@material-ui/core";
+import { ValidaCadastro } from "../contexts/valida-cadastro";
 
 export function DadosPessoais(props) {
 	const [nome, setNome] = useState("");
@@ -10,7 +11,22 @@ export function DadosPessoais(props) {
 
 	const [erros, setErros] = useState({ cpf: { valido: true, text: "" } });
 
-	const { submit, validarCpf } = props;
+	const { submit } = props;
+
+	const validacoes = useContext(ValidaCadastro);
+
+	function validarCampos(event) {
+		const { value, id } = event.target;
+		const valid = { ...erros };
+		valid[id] = validacoes[id](value);
+		setErros(valid);
+	}
+
+	function canSubmit() {
+		for (let campo in erros) if (!erros[campo].valido) return false;
+
+		return true;
+	}
 
 	function handleChangeNome(event) {
 		setNome(event.target.value);
@@ -24,10 +40,6 @@ export function DadosPessoais(props) {
 		setCpf(event.target.value);
 	}
 
-	function handleBlurCpf() {
-		setErros({ ...erros, cpf: validarCpf(cpf) });
-	}
-
 	function handleChangePromocoes(event) {
 		setPromocoes(event.target.checked);
 	}
@@ -38,7 +50,8 @@ export function DadosPessoais(props) {
 
 	function handleSubmit(event) {
 		event.preventDefault();
-		submit({ nome, sobrenome, cpf, promocoes, novidades });
+
+		if (canSubmit()) submit({ nome, sobrenome, cpf, promocoes, novidades });
 	}
 
 	return (
@@ -66,7 +79,7 @@ export function DadosPessoais(props) {
 			<TextField
 				value={cpf}
 				onChange={handleChangeCpf}
-				onBlur={handleBlurCpf}
+				onBlur={validarCampos}
 				error={!erros.cpf.valido}
 				helperText={erros.cpf.text}
 				id='cpf'
@@ -101,7 +114,7 @@ export function DadosPessoais(props) {
 			/>
 
 			<Button type='submit' variant='contained' color='primary'>
-				Cadastrar
+				Próximo
 			</Button>
 		</form>
 	);

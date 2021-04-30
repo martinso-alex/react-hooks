@@ -4,7 +4,7 @@ import { DadosUsuario } from "./dados-usuario";
 import { DadosEntrega } from "./dados-entrega";
 import { Step, StepLabel, Stepper, Typography } from "@material-ui/core";
 
-export function FormCadastro({ submit, validarCpf }) {
+export function FormCadastro({ submit }) {
 	const [etapa, setEtapa] = useState(0);
 	const [dados, setDados] = useState({});
 
@@ -14,7 +14,7 @@ export function FormCadastro({ submit, validarCpf }) {
 
 	const formularios = [
 		<DadosUsuario submit={coletaDados} />,
-		<DadosPessoais submit={coletaDados} validarCpf={validarCpf} />,
+		<DadosPessoais submit={coletaDados} />,
 		<DadosEntrega submit={coletaDados} />,
 		<Typography variant='h5'>Obrigado por se Cadastrar!</Typography>,
 	];
