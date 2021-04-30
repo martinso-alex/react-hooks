@@ -25,6 +25,7 @@ function App() {
 			>
 				Formulário de Cadastro
 			</Typography>
+
 			<FormCadastro submit={submit} validarCpf={validarCpf} />
 		</Container>
 	);
